@@ -2,6 +2,7 @@
 
 .secret
 .infuraid
+.env
 config.js
 
 # dependencies
