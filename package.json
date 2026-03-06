@@ -19,6 +19,7 @@
     "wagmi": "^2.19.5"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "autoprefixer": "^10.2.6",
     "eslint": "7.29.0",
     "eslint-config-next": "^13.5.11",

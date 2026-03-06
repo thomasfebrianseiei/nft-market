@@ -10,6 +10,7 @@ export default function Home() {
   const [loadingState, setLoadingState] = useState('not-loaded')
   const [buying, setBuying] = useState(null)
   const [error, setError] = useState('')
+  const [detailNft, setDetailNft] = useState(null)
 
   const signer = useEthersSigner()
   const { open } = useConnectModal()
@@ -136,7 +137,14 @@ export default function Home() {
                 </div>
                 <div className="p-5">
                   <h3 className="font-semibold text-lg text-white mb-2 truncate">{nft.name}</h3>
-                  <p className="text-white/50 text-sm line-clamp-2 h-10 mb-4">{nft.description}</p>
+                  <div className="mb-4">
+                    <p className="text-white/50 text-sm line-clamp-2">{nft.description}</p>
+                    {nft.description && nft.description.length > 80 && (
+                      <button onClick={() => setDetailNft(nft)} className="text-cyber-cyan text-xs mt-1 hover:text-cyber-neon transition-colors">
+                        See more
+                      </button>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyber-neon to-cyber-cyan"></div>
                     <p className="text-white/40 text-xs truncate">{nft.seller.slice(0, 6)}...{nft.seller.slice(-4)}</p>
@@ -164,6 +172,40 @@ export default function Home() {
             ))}
           </div>
         </>
+      )}
+
+      {detailNft && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+          onClick={() => setDetailNft(null)}
+        >
+          <div
+            className="rounded-2xl p-6 w-full max-w-md border border-cyber-cyan/30 shadow-2xl"
+            style={{ backgroundColor: '#0d0d1a' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <h2 className="font-cyber text-lg font-bold text-gradient pr-4">{detailNft.name}</h2>
+              <button onClick={() => setDetailNft(null)} className="text-white/40 hover:text-white transition-colors text-xl leading-none flex-shrink-0">×</button>
+            </div>
+            <img src={detailNft.image} alt={detailNft.name} className="w-full rounded-xl mb-4 object-cover max-h-48" />
+            <p className="text-white/70 text-sm leading-relaxed mb-4">{detailNft.description}</p>
+            <div className="flex items-center justify-between pt-4 border-t border-white/10">
+              <div>
+                <p className="text-white/40 text-xs mb-1">Price</p>
+                <p className="font-cyber font-bold text-cyber-neon">{detailNft.price} BNB</p>
+              </div>
+              <button
+                onClick={() => { buyNft(detailNft); setDetailNft(null) }}
+                disabled={buying === detailNft.itemId}
+                className="btn-cyber btn-neon text-xs px-5 py-2 disabled:opacity-50"
+              >
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
